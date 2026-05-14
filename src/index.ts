@@ -179,7 +179,7 @@ Maghrib (Terbenam matahari), Isya (Malam).`;
           : systemPrompt;
         
         // Panggil Workers AI
-        const stream = await env.AI.run('@cf/google/gemma-4-26b-a4b-it', {
+        const stream = await env.AI.run('@cf/google/gemma-3-12b-it', {
           messages: [
             { role: 'system', content: fullPrompt },
             ...messages
