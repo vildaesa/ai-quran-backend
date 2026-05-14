@@ -166,3 +166,4 @@ dist
 !.env.example
 .wrangler/
 package-lock.json
+yarn.lock
