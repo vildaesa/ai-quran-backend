@@ -13,7 +13,7 @@ Backend API untuk asisten Islami cerdas yang dibangun menggunakan **Cloudflare W
 - **Runtime**: Cloudflare Workers
 - **Language**: TypeScript
 - **Framework**: Standard Fetch API (dengan itty-router untuk manajemen rute)
-- **AI Model**: `@cf/meta/llama-3.2-3b-instruct`
+- **AI Model**: `@cf/google/gemma-4-26b-a4b-it`
 
 ## Pengembangan Lokal
 

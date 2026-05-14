@@ -79,7 +79,7 @@ export default {
     const path = url.pathname;
     
     const corsHeaders = {
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': 'https://vildaesa.github.io',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     };
@@ -121,7 +121,9 @@ export default {
         let contextData = '';
         let systemPrompt = `Kamu adalah asisten Islami yang ramah dan berpengetahuan luas. 
 Gunakan bahasa Indonesia yang sopan dan mudah dimengerti. 
-Berikan jawaban berdasarkan sumber yang terpercaya (Al-Quran dan Hadits).`;
+Berikan jawaban berdasarkan sumber yang terpercaya (Al-Quran dan Hadits).
+PENTING: Jika menulis teks Arab, gunakan karakter Arabic Unicode standar. JANGAN gunakan karakter dari script lain (seperti Cyrillic) yang terlihat mirip.
+Jika kamu tidak yakin dengan ejaan Arab suatu ayat yang panjang, lebih baik berikan terjemahannya saja atau sarankan user untuk merujuk ke Mushaf Al-Quran.`;
         
         // Handle Quran intent
         if (intent.type === 'quran') {
@@ -177,12 +179,13 @@ Maghrib (Terbenam matahari), Isya (Malam).`;
           : systemPrompt;
         
         // Panggil Workers AI
-        const stream = await env.AI.run('@cf/meta/llama-3.2-3b-instruct', {
+        const stream = await env.AI.run('@cf/google/gemma-4-26b-a4b-it', {
           messages: [
             { role: 'system', content: fullPrompt },
             ...messages
           ],
           stream: true,
+          max_tokens: 2048,
         });
         
         return new Response(stream as any, {
