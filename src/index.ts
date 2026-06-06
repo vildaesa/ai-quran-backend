@@ -272,7 +272,7 @@ WAJIB menggunakan data panduan sholat yang sudah disediakan.`;
           : systemPrompt;
 
         // Panggil Workers AI
-        const stream = await env.AI.run('@cf/qwen/qwen3-30b-a3b-fp8', {
+        const stream = await env.AI.run('@cf/google/gemma-3-12b-it', {
           messages: [
             { role: 'system', content: fullPrompt },
             ...messages
