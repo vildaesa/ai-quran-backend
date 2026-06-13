@@ -395,7 +395,8 @@ WAJIB menggunakan data panduan sholat yang sudah disediakan.`;
           ? `${systemPrompt}\n\nBerikut adalah data yang bisa kamu gunakan untuk menjawab pertanyaan user:\n${contextData}\n\nSekarang jawab pertanyaan user dengan ramah dan informatif.`
           : systemPrompt;
 
-        const aiStream = await env.AI.run('@cf/google/gemma-3-12b-it', {
+        // PERBAIKAN: Menggunakan model Llama 3.1 8B yang sangat stabil dan dijamin aktif di semua cloudflare
+        const aiStream = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
           messages: [
             { role: 'system', content: fullPrompt },
             ...messages
@@ -408,19 +409,14 @@ WAJIB menggunakan data panduan sholat yang sudah disediakan.`;
           const encoder = new TextEncoder();
           const actionEvent = `event: action\ndata: ${JSON.stringify(actionToSend)}\n\n`;
           
-          // Berikan respon teks pembuka ramah langsung dari server ke chatbox untuk menjamin text stream terisi lebih awal
           const introMsg = `Baik, akan saya cari dan tampilkan surah **${actionToSend.surahName}** Ayat **${actionToSend.ayah}** untuk Anda.\n\n*Sedang membuka lembaran Mushaf...*\n\n`;
           const introEvent = `data: ${JSON.stringify({ response: introMsg })}\n\n`;
 
           const combinedStream = new ReadableStream({
             start(controller) {
-              // 1. Kirim event aksi pembukaan surah terlebih dahulu
               controller.enqueue(encoder.encode(actionEvent));
-              
-              // 2. Kirim pesan pengantar ramah agar asisten langsung merespons di chat UI
               controller.enqueue(encoder.encode(introEvent));
               
-              // 3. Teruskan sisa aliran data ulasan/tafsir mendalam dari AI
               const reader = aiStream.getReader();
               function push() {
                 reader.read().then(({ done, value }) => {
@@ -445,9 +441,11 @@ WAJIB menggunakan data panduan sholat yang sudah disediakan.`;
           headers: { 'Content-Type': 'text/event-stream', ...corsHeaders }
         });
 
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error:', error);
-        return new Response(JSON.stringify({ error: 'Internal server error' }), {
+        // PERBAIKAN: Mengirim pesan error asli ke frontend agar mudah dianalisis
+        const errorMessage = error?.message || error?.toString() || 'Internal server error';
+        return new Response(JSON.stringify({ error: errorMessage }), {
           status: 500,
           headers: { 'Content-Type': 'application/json', ...corsHeaders }
         });
