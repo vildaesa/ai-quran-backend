@@ -395,8 +395,8 @@ WAJIB menggunakan data panduan sholat yang sudah disediakan.`;
           ? `${systemPrompt}\n\nBerikut adalah data yang bisa kamu gunakan untuk menjawab pertanyaan user:\n${contextData}\n\nSekarang jawab pertanyaan user dengan ramah dan informatif.`
           : systemPrompt;
 
-        // PERBAIKAN: Menggunakan model Llama 3 yang sangat stabil dan dijamin aktif di semua cloudflare
-        const aiStream = await env.AI.run('@cf/meta/llama-3.2-1b-instruct', {
+        // PERBAIKAN: Menggunakan model gemma yang sangat stabil dan dijamin aktif di semua cloudflare
+        const aiStream = await env.AI.run('@cf/google/gemma-4-26b-a4b-it', {
           messages: [
             { role: 'system', content: fullPrompt },
             ...messages
