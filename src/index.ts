@@ -396,7 +396,7 @@ WAJIB menggunakan data panduan sholat yang sudah disediakan.`;
           : systemPrompt;
 
         // PERBAIKAN: Menggunakan model gemma yang sangat stabil dan dijamin aktif di semua cloudflare
-        const aiStream = await env.AI.run('@cf/google/gemma-4-26b-a4b-it', {
+        const aiStream = await env.AI.run('@cf/google/gemma-3-12b-it', {
           messages: [
             { role: 'system', content: fullPrompt },
             ...messages
